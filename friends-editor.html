@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>HopVet Friends Editor</title>
+<style>
+  :root {
+    --bg: #F7FAF8;
+    --card: #FFFFFF;
+    --border: #D8E0DC;
+    --accent: #006662;
+    --accent-text: #FFFFFF;
+    --text: #1F3325;
+    --muted: #6B7A70;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+  }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .subtitle { color: var(--muted); margin: 0 0 20px; font-size: 14px; }
+
+  .toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .toolbar label.file-label {
+    background: var(--accent);
+    color: var(--accent-text);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .toolbar input[type=file] { display: none; }
+  .toolbar button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--accent);
+    background: var(--card);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .toolbar button:disabled { opacity: 0.4; cursor: default; }
+  .status { font-size: 13px; color: var(--muted); }
+
+  .layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+
+  .friend-list-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .friend-item {
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .friend-item:hover { background: var(--bg); }
+  .friend-item.selected { background: var(--accent); color: var(--accent-text); }
+
+  .form-panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+  .empty-state { color: var(--muted); font-size: 15px; }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .field-grid.wide { grid-template-columns: 1fr; }
+  @media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; } }
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .field input[type=text], .field textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .field textarea { min-height: 60px; resize: vertical; }
+  .field .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  .logo-preview {
+    margin-top: 8px;
+    max-width: 160px;
+    max-height: 80px;
+    display: block;
+  }
+  .logo-preview-missing {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #A83B32;
+  }
+</style>
+</head>
+<body>
+
+<h1>HopVet Friends Editor</h1>
+<p class="subtitle">Load your friends.json, edit through the form below, then download the updated file to upload to GitHub.</p>
+
+<div class="toolbar">
+  <label class="file-label">
+    Load friends.json
+    <input type="file" id="fileInput" accept=".json" />
+  </label>
+  <button id="addFriendBtn" disabled>+ Add new friend</button>
+  <button id="downloadBtn" disabled>Download updated friends.json</button>
+  <span class="status" id="statusText">No file loaded yet.</span>
+</div>
+
+<div class="layout" id="mainLayout" style="display:none;">
+  <div class="friend-list-panel" id="friendListPanel"></div>
+  <div class="form-panel" id="formPanel">
+    <p class="empty-state">Select a friend on the left to start editing, or add a new one.</p>
+  </div>
+</div>
+
+<script>
+let friends = [];
+let selectedId = null;
+
+const fileInput = document.getElementById("fileInput");
+const addFriendBtn = document.getElementById("addFriendBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const statusText = document.getElementById("statusText");
+const mainLayout = document.getElementById("mainLayout");
+const friendListPanel = document.getElementById("friendListPanel");
+const formPanel = document.getElementById("formPanel");
+
+fileInput.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    try {
+      friends = JSON.parse(event.target.result);
+      statusText.textContent = `Loaded ${friends.length} friend(s).`;
+      downloadBtn.disabled = false;
+      addFriendBtn.disabled = false;
+      mainLayout.style.display = "grid";
+      renderFriendList();
+    } catch (err) {
+      statusText.textContent = "Error: that file isn't valid JSON. Nothing was changed.";
+    }
+  };
+  reader.readAsText(file);
+});
+
+function createBlankFriend() {
+  const newId = friends.length ? Math.max(...friends.map((f) => f.id)) + 1 : 1;
+  return {
+    id: newId,
+    name: "New friend",
+    logo_url: "",
+    website_url: "",
+    tags_en: [],
+    tags_cs: [],
+    description_en: "",
+    description_cs: "",
+  };
+}
+
+addFriendBtn.addEventListener("click", () => {
+  const friend = createBlankFriend();
+  friends.push(friend);
+  selectedId = friend.id;
+  renderFriendList();
+  renderForm(friend);
+  const nameField = formPanel.querySelector('[data-field="name"]');
+  if (nameField) { nameField.focus(); nameField.select(); }
+});
+
+function renderFriendList() {
+  const sorted = [...friends].sort((a, b) => a.name.localeCompare(b.name));
+  friendListPanel.innerHTML = "";
+  for (const friend of sorted) {
+    const div = document.createElement("div");
+    div.className = "friend-item" + (friend.id === selectedId ? " selected" : "");
+    div.textContent = friend.name;
+    div.addEventListener("click", () => {
+      selectedId = friend.id;
+      renderFriendList();
+      renderForm(friend);
+    });
+    friendListPanel.appendChild(div);
+  }
+}
+
+function getFriend(id) {
+  return friends.find((f) => f.id === id);
+}
+
+function renderForm(friend) {
+  const html = `
+    <h2 style="font-size:16px;margin:0 0 16px;">${escapeHtml(friend.name)} <span style="font-weight:normal;color:var(--muted);font-size:13px;">(id ${friend.id})</span></h2>
+    <div class="field-grid">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" data-field="name" data-resync-list="true" value="${attr(friend.name)}" />
+      </div>
+      <div class="field">
+        <label>Website URL</label>
+        <input type="text" data-field="website_url" value="${attr(friend.website_url)}" />
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>Logo path (the actual image file needs to be added to the project at this path - see note below)</label>
+        <input type="text" data-field="logo_url" placeholder="/images/friends/example.png" value="${attr(friend.logo_url)}" />
+        <div class="hint">This only stores the path - you still need to add the actual image file to <code>public/images/friends/</code> in the project yourself.</div>
+        ${friend.logo_url ? `<img class="logo-preview" src="${attr(friend.logo_url)}" alt="Logo preview" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><div class="logo-preview-missing" style="display:none;">Preview unavailable here (this editor runs standalone, so it can't see the project's image files) - the path itself will still work once the image is added to the project.</div>` : ""}
+      </div>
+      <div class="field">
+        <label>Tags (English) - comma separated</label>
+        <input type="text" data-field="tags_en" data-array-field="true" placeholder="Sanctuary, Rabbits & Rodents" value="${attr((friend.tags_en || []).join(", "))}" />
+      </div>
+      <div class="field">
+        <label>Tags (Czech) - comma separated</label>
+        <input type="text" data-field="tags_cs" data-array-field="true" placeholder="Útulek, Králíci a hlodavci" value="${attr((friend.tags_cs || []).join(", "))}" />
+      </div>
+      <div class="field">
+        <label>Description (English)</label>
+        <textarea data-field="description_en">${escapeHtml(friend.description_en)}</textarea>
+      </div>
+      <div class="field">
+        <label>Description (Czech)</label>
+        <textarea data-field="description_cs">${escapeHtml(friend.description_cs)}</textarea>
+      </div>
+    </div>
+  `;
+  formPanel.innerHTML = html;
+  attachFieldListeners(friend.id);
+}
+
+function attachFieldListeners(friendId) {
+  const friend = getFriend(friendId);
+  formPanel.querySelectorAll("[data-field]").forEach((el) => {
+    const field = el.dataset.field;
+    const isArrayField = el.dataset.arrayField === "true";
+    el.addEventListener("input", () => {
+      if (isArrayField) {
+        friend[field] = el.value.split(",").map((s) => s.trim()).filter(Boolean);
+      } else {
+        friend[field] = el.value;
+      }
+      if (el.dataset.resyncList) renderFriendList();
+    });
+    // Logo URL changes need a full re-render to update the preview image.
+    if (field === "logo_url") {
+      el.addEventListener("blur", () => renderForm(friend));
+    }
+  });
+}
+
+downloadBtn.addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(friends, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "friends.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function attr(str) {
+  return escapeHtml(str || "");
+}
+</script>
+
+</body>
+</html>
