@@ -186,6 +186,8 @@ function createBlankFriend() {
     name: "New friend",
     logo_url: "",
     website_url: "",
+    facebook_url: "",
+    instagram_url: "",
     tags_en: [],
     tags_cs: [],
     description_en: "",
@@ -234,6 +236,14 @@ function renderForm(friend) {
       <div class="field">
         <label>Website URL</label>
         <input type="text" data-field="website_url" value="${attr(friend.website_url)}" />
+      </div>
+      <div class="field">
+        <label>Facebook URL</label>
+        <input type="text" data-field="facebook_url" value="${attr(friend.facebook_url)}" />
+      </div>
+      <div class="field">
+        <label>Instagram URL</label>
+        <input type="text" data-field="instagram_url" value="${attr(friend.instagram_url)}" />
       </div>
       <div class="field" style="grid-column:1/-1;">
         <label>Logo path (the actual image file needs to be added to the project at this path - see note below)</label>
