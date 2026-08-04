@@ -87,16 +87,46 @@
     cursor: pointer;
     font-size: 14px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
   }
   .clinic-item:hover { background: var(--bg); }
   .clinic-item.selected { background: var(--accent); color: var(--accent-text); }
+
+  .clinic-item-main {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .clinic-item-kraj {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .clinic-item.selected .clinic-item-kraj {
+    color: var(--accent-text);
+    opacity: 0.85;
+  }
+
+  .unchecked-mark {
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
   .review-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: var(--warn-border);
     flex-shrink: 0;
+  }
+
+  .checked-banner {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    font-size: 14px;
   }
 
   .form-panel {
@@ -234,11 +264,16 @@
   </label>
   <button id="addClinicBtn" disabled>+ Add new clinic</button>
   <button id="downloadBtn" disabled>Download updated clinics.json</button>
+  <button id="checkAllBtn" disabled>Check All</button>
+  <button id="uncheckAllBtn" disabled>Uncheck All</button>
   <span class="status" id="statusText">No file loaded yet.</span>
 </div>
 
 <div class="layout" id="mainLayout" style="display:none;">
   <div class="clinic-list-panel">
+    <select id="krajFilter" style="width:100%;margin-bottom:8px;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:14px;">
+      <option value="all">All kraje</option>
+    </select>
     <input type="search" id="searchBox" placeholder="Search clinics..." />
     <div id="clinicList"></div>
   </div>
@@ -263,11 +298,14 @@ let selectedId = null;
 const fileInput = document.getElementById("fileInput");
 const addClinicBtn = document.getElementById("addClinicBtn");
 const downloadBtn = document.getElementById("downloadBtn");
+const checkAllBtn = document.getElementById("checkAllBtn");
+const uncheckAllBtn = document.getElementById("uncheckAllBtn");
 const statusText = document.getElementById("statusText");
 const mainLayout = document.getElementById("mainLayout");
 const clinicListEl = document.getElementById("clinicList");
 const formPanel = document.getElementById("formPanel");
 const searchBox = document.getElementById("searchBox");
+const krajFilter = document.getElementById("krajFilter");
 
 fileInput.addEventListener("change", (e) => {
   const file = e.target.files[0];
@@ -279,13 +317,39 @@ fileInput.addEventListener("change", (e) => {
       statusText.textContent = `Loaded ${clinics.length} clinics.`;
       downloadBtn.disabled = false;
       addClinicBtn.disabled = false;
+      checkAllBtn.disabled = false;
+      uncheckAllBtn.disabled = false;
       mainLayout.style.display = "grid";
+      populateKrajFilter();
       renderClinicList();
     } catch (err) {
       statusText.textContent = "Error: that file isn't valid JSON. Nothing was changed.";
     }
   };
   reader.readAsText(file);
+});
+
+// Builds the kraj filter dropdown from whatever kraj values actually
+// appear in the loaded data, rather than hardcoding a list that could
+// drift out of sync with real clinic data.
+function populateKrajFilter() {
+  const krajeInData = [...new Set(clinics.map((c) => c.kraj).filter(Boolean))].sort();
+  krajFilter.innerHTML = `<option value="all">All kraje</option>` +
+    krajeInData.map((k) => `<option value="${attr(k)}">${escapeHtml(k)}</option>`).join("");
+}
+
+krajFilter.addEventListener("change", renderClinicList);
+
+checkAllBtn.addEventListener("click", () => {
+  clinics.forEach((c) => { c.manually_checked = true; });
+  renderClinicList();
+  if (selectedId != null) renderForm(getClinic(selectedId));
+});
+
+uncheckAllBtn.addEventListener("click", () => {
+  clinics.forEach((c) => { c.manually_checked = false; });
+  renderClinicList();
+  if (selectedId != null) renderForm(getClinic(selectedId));
 });
 
 function blankDayEntry() {
@@ -330,6 +394,7 @@ function createBlankClinic() {
     english_communication: false,
     weekly_hours,
     hours_needs_review: false,
+    manually_checked: false,
   };
 }
 
@@ -348,13 +413,25 @@ searchBox.addEventListener("input", renderClinicList);
 
 function renderClinicList() {
   const query = searchBox.value.trim().toLowerCase();
+  const selectedKraj = krajFilter.value;
   const sorted = [...clinics].sort((a, b) => a.name.localeCompare(b.name));
   clinicListEl.innerHTML = "";
   for (const clinic of sorted) {
     if (query && !clinic.name.toLowerCase().includes(query)) continue;
+    if (selectedKraj !== "all" && clinic.kraj !== selectedKraj) continue;
     const div = document.createElement("div");
     div.className = "clinic-item" + (clinic.id === selectedId ? " selected" : "");
-    div.innerHTML = `<span>${escapeHtml(clinic.name)}</span>` + (clinic.hours_needs_review ? '<span class="review-dot" title="Hours need review"></span>' : "");
+    const krajText = clinic.kraj ? `<span class="clinic-item-kraj">${escapeHtml(clinic.kraj)}</span>` : "";
+    const reviewDot = clinic.hours_needs_review ? '<span class="review-dot" title="Hours need review"></span>' : "";
+    const checkedMark = !clinic.manually_checked ? '<span class="unchecked-mark" title="Not yet checked">❗</span>' : "";
+    div.innerHTML = `
+      <div class="clinic-item-main">
+        <span>${escapeHtml(clinic.name)}</span>
+        ${reviewDot}
+        ${checkedMark}
+      </div>
+      ${krajText}
+    `;
     div.addEventListener("click", () => {
       selectedId = clinic.id;
       renderClinicList();
@@ -389,6 +466,12 @@ function renderPhoneQuickPicks(phone) {
 
 function renderForm(clinic) {
   const html = `
+    <div class="checked-banner">
+      <label class="checkbox-field" style="margin:0;">
+        <input type="checkbox" data-field="manually_checked" data-type="checkbox" data-resync-list="true" ${clinic.manually_checked ? "checked" : ""} />
+        <strong>Checked</strong> - I've personally reviewed this clinic's data
+      </label>
+    </div>
     <div class="section">
       <h2>Identity &amp; location <span style="font-weight:normal;color:var(--muted);font-size:13px;">(id ${clinic.id})</span></h2>
       <div class="field-grid">
