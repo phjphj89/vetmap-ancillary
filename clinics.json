@@ -647,10 +647,10 @@
     "id": 7,
     "name": "BUDvet - U Trojice (České Budějovice)",
     "region": "České Budějovice",
-    "address": "U trojice 511/8a, 370 04 České Budějovice (2nd location: J. R. Schustera, Rožnov)",
+    "address": "U trojice 511/8a, 370 04 České Budějovice",
     "lat": 48.9872127,
     "lng": 14.4701344,
-    "phone": "Trojická: 735 172 517, Rožnov: 775 662 484",
+    "phone": "+420 735 172 517",
     "website": "http://www.budvet.cz/",
     "top_pick": false,
     "recommended_vet": "MVDr. Anna Hundáková (na mateřské), zastupuje MVDr. Pavlína Turková",
@@ -679,8 +679,10 @@
         "end1": "18:00",
         "start2": "",
         "end2": "",
-        "note_en": "18:00 - 20:00 emergencies",
-        "note_cs": "18:00 - 20:00 pohotovost"
+        "note_en": "",
+        "note_cs": "",
+        "emergency_start1": "18:00",
+        "emergency_end1": "08:00"
       },
       "Tue": {
         "closed": false,
@@ -688,8 +690,10 @@
         "end1": "18:00",
         "start2": "",
         "end2": "",
-        "note_en": "18:00 - 20:00 emergencies",
-        "note_cs": "18:00 - 20:00 pohotovost"
+        "note_en": "",
+        "note_cs": "",
+        "emergency_start1": "18:00",
+        "emergency_end1": "08:00"
       },
       "Wed": {
         "closed": false,
@@ -697,8 +701,10 @@
         "end1": "16:00",
         "start2": "",
         "end2": "",
-        "note_en": "18:00 - 20:00 emergencies",
-        "note_cs": "18:00 - 20:00 pohotovost"
+        "note_en": "",
+        "note_cs": "",
+        "emergency_start1": "18:00",
+        "emergency_end1": "08:00"
       },
       "Thu": {
         "closed": false,
@@ -706,8 +712,10 @@
         "end1": "18:00",
         "start2": "",
         "end2": "",
-        "note_en": "18:00 - 20:00 emergencies",
-        "note_cs": "18:00 - 20:00 pohotovost"
+        "note_en": "",
+        "note_cs": "",
+        "emergency_start1": "18:00",
+        "emergency_end1": "08:00"
       },
       "Fri": {
         "closed": false,
@@ -715,17 +723,21 @@
         "end1": "16:00",
         "start2": "",
         "end2": "",
-        "note_en": "18:00 - 20:00 emergencies",
-        "note_cs": "18:00 - 20:00 pohotovost"
+        "note_en": "",
+        "note_cs": "",
+        "emergency_start1": "18:00",
+        "emergency_end1": "08:00"
       },
       "Sat": {
-        "closed": false,
-        "start1": "10:00",
-        "end1": "20:00",
+        "closed": true,
+        "start1": "",
+        "end1": "",
         "start2": "",
         "end2": "",
-        "note_en": "Emergencies only",
-        "note_cs": "Pohotovost"
+        "note_en": "",
+        "note_cs": "",
+        "emergency_start1": "10:00",
+        "emergency_end1": "20:00"
       },
       "Sun": {
         "closed": false,
@@ -748,17 +760,18 @@
     },
     "hours_needs_review": false,
     "internal_contact_email": "info@budvet.cz",
-    "call_phone": "+420 735 172 517"
+    "call_phone": "+420 735 172 517",
+    "manually_checked": true
   },
   {
     "id": 8,
     "name": "Veterinární klinika U Výstaviště (České Budějovice)",
     "region": "České Budějovice",
-    "address": "U Výstaviště 23, 370 05 České Budějovice",
+    "address": "U Výstaviště 479/23, 370 05 České Budějovice",
     "lat": 48.9838588,
     "lng": 14.4559303,
     "phone": "+420 385 346 033",
-    "website": "",
+    "website": "https://lapacek.cz/",
     "top_pick": false,
     "recommended_vet": "",
     "hours": "Mon-Fri 8-20, Sat-Sun 9-13,17-19",
@@ -772,18 +785,18 @@
     "has_weekend_emergency": null,
     "notes_en": "",
     "notes_cs": "",
-    "emergency_en": "By phone arrangement only, 605 866 733, acute/life-threatening cases only, surcharge 2000 Kč + 50%",
-    "emergency_cs": "",
-    "facebook_url": "",
+    "emergency_en": "Emergency service by phone arrangement only, +420 605 866 733; surcharges apply",
+    "emergency_cs": "Pohotovostní služba pouze po telefonické domluvě, +420 605 866 733; účtuje se příplatek",
+    "facebook_url": "https://cs-cz.facebook.com/pages/category/Veterinarian/Veterin%C3%A1rn%C3%AD-klinika-U-V%C3%BDstavi%C5%A1t%C4%9B-889871131094868/",
     "instagram_url": "",
-    "google_rating": null,
-    "google_review_count": null,
+    "google_rating": 4.8,
+    "google_review_count": 119,
     "hospitalization": false,
     "weekly_hours": {
       "Mon": {
         "closed": false,
-        "start1": "8",
-        "end1": "20",
+        "start1": "08:00",
+        "end1": "20:00",
         "start2": "",
         "end2": "",
         "note_en": "",
@@ -791,8 +804,8 @@
       },
       "Tue": {
         "closed": false,
-        "start1": "8",
-        "end1": "20",
+        "start1": "08:00",
+        "end1": "20:00",
         "start2": "",
         "end2": "",
         "note_en": "",
@@ -800,8 +813,8 @@
       },
       "Wed": {
         "closed": false,
-        "start1": "8",
-        "end1": "20",
+        "start1": "08:00",
+        "end1": "20:00",
         "start2": "",
         "end2": "",
         "note_en": "",
@@ -809,8 +822,8 @@
       },
       "Thu": {
         "closed": false,
-        "start1": "8",
-        "end1": "20",
+        "start1": "08:00",
+        "end1": "20:00",
         "start2": "",
         "end2": "",
         "note_en": "",
@@ -818,8 +831,8 @@
       },
       "Fri": {
         "closed": false,
-        "start1": "8",
-        "end1": "20",
+        "start1": "08:00",
+        "end1": "20:00",
         "start2": "",
         "end2": "",
         "note_en": "",
@@ -827,19 +840,20 @@
       },
       "Sat": {
         "closed": false,
-        "start1": "9",
-        "end1": "13",
-        "start2": "17",
-        "end2": "19",
+        "start1": "09:00",
+        "end1": "13:00",
+        "start2": "17:00",
+        "end2": "19:00",
         "note_en": "",
-        "note_cs": ""
+        "note_cs": "",
+        "emergency_start1": ""
       },
       "Sun": {
         "closed": false,
-        "start1": "9",
-        "end1": "13",
-        "start2": "17",
-        "end2": "19",
+        "start1": "09:00",
+        "end1": "13:00",
+        "start2": "17:00",
+        "end2": "19:00",
         "note_en": "",
         "note_cs": ""
       },
@@ -853,7 +867,9 @@
         "note_cs": ""
       }
     },
-    "hours_needs_review": true
+    "hours_needs_review": false,
+    "call_phone": "+420 385 346 033",
+    "manually_checked": true
   },
   {
     "id": 9,
@@ -877,27 +893,27 @@
     "has_weekend_emergency": true,
     "notes_en": "Priority given to booked & acute patients",
     "notes_cs": "",
-    "emergency_en": "Weekend/holiday emergency by mobile",
-    "emergency_cs": "",
-    "facebook_url": "",
+    "emergency_en": "Weekend and holiday emergency on mobile",
+    "emergency_cs": "Víkendy a svátky pohotovost na telefonu",
+    "facebook_url": "https://www.facebook.com/veterinachvalsiny",
     "instagram_url": "",
-    "google_rating": null,
-    "google_review_count": null,
+    "google_rating": 4.8,
+    "google_review_count": 22,
     "hospitalization": false,
     "weekly_hours": {
       "Mon": {
         "closed": false,
-        "start1": "9",
+        "start1": "10:00",
         "end1": "11",
-        "start2": "15",
-        "end2": "18",
+        "start2": "14:00",
+        "end2": "17:00",
         "note_en": "",
         "note_cs": ""
       },
       "Tue": {
         "closed": false,
-        "start1": "16",
-        "end1": "18",
+        "start1": "15:00",
+        "end1": "18:30",
         "start2": "",
         "end2": "",
         "note_en": "",
@@ -905,17 +921,17 @@
       },
       "Wed": {
         "closed": false,
-        "start1": "9",
+        "start1": "10:00",
         "end1": "11",
-        "start2": "15",
-        "end2": "18",
+        "start2": "14:00",
+        "end2": "17:00",
         "note_en": "",
         "note_cs": ""
       },
       "Thu": {
         "closed": false,
-        "start1": "16",
-        "end1": "18",
+        "start1": "15:00",
+        "end1": "18:30",
         "start2": "",
         "end2": "",
         "note_en": "",
@@ -923,10 +939,10 @@
       },
       "Fri": {
         "closed": false,
-        "start1": "9",
+        "start1": "10:00",
         "end1": "11",
-        "start2": "15",
-        "end2": "18",
+        "start2": "14:00",
+        "end2": "17:00",
         "note_en": "",
         "note_cs": ""
       },
@@ -958,7 +974,10 @@
         "note_cs": ""
       }
     },
-    "hours_needs_review": true
+    "hours_needs_review": false,
+    "call_phone": "+420 725 146 205",
+    "internal_contact_email": "d.warcholova@gmail.com",
+    "manually_checked": true
   },
   {
     "id": 10,
@@ -7933,15 +7952,15 @@
     "notes_cs": "",
     "emergency_en": "",
     "emergency_cs": "",
-    "facebook_url": "",
+    "facebook_url": "https://cs-cz.facebook.com/VETPOINTtrebon/",
     "instagram_url": "",
-    "google_rating": null,
-    "google_review_count": null,
+    "google_rating": 4.8,
+    "google_review_count": 390,
     "hospitalization": false,
     "weekly_hours": {
       "Mon": {
         "closed": false,
-        "start1": "8",
+        "start1": "08:00",
         "end1": "18",
         "start2": "",
         "end2": "",
@@ -7950,7 +7969,7 @@
       },
       "Tue": {
         "closed": false,
-        "start1": "8",
+        "start1": "08:00",
         "end1": "18",
         "start2": "",
         "end2": "",
@@ -7959,7 +7978,7 @@
       },
       "Wed": {
         "closed": false,
-        "start1": "8",
+        "start1": "08:00",
         "end1": "18",
         "start2": "",
         "end2": "",
@@ -7968,7 +7987,7 @@
       },
       "Thu": {
         "closed": false,
-        "start1": "8",
+        "start1": "08:00",
         "end1": "18",
         "start2": "",
         "end2": "",
@@ -7977,7 +7996,7 @@
       },
       "Fri": {
         "closed": false,
-        "start1": "8",
+        "start1": "08:00",
         "end1": "18",
         "start2": "",
         "end2": "",
@@ -7986,7 +8005,7 @@
       },
       "Sat": {
         "closed": false,
-        "start1": "9",
+        "start1": "09:00",
         "end1": "12",
         "start2": "",
         "end2": "",
@@ -8012,7 +8031,10 @@
         "note_cs": ""
       }
     },
-    "hours_needs_review": true
+    "hours_needs_review": false,
+    "call_phone": "+420 608 399 144",
+    "internal_contact_email": "info@vetpoint-trebon.cz",
+    "manually_checked": true
   },
   {
     "id": 76,
