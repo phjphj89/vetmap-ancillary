@@ -132,7 +132,7 @@
     "instagram_url": "",
     "google_rating": 4.7,
     "google_review_count": 443,
-    "hospitalization": false,
+    "hospitalization": true,
     "weekly_hours": {
       "Mon": {
         "closed": false,
@@ -240,7 +240,7 @@
     "instagram_url": "https://www.instagram.com/exocare.brno",
     "google_rating": 4.9,
     "google_review_count": 54,
-    "hospitalization": false,
+    "hospitalization": true,
     "weekly_hours": {
       "Mon": {
         "closed": false,
