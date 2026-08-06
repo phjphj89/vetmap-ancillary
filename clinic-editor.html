@@ -380,6 +380,9 @@ function createBlankClinic() {
     is_ostrava: false,
     is_24_7: false,
     has_weekend_emergency: false,
+    open_weekends_bookable: false,
+    after_hours_emergency: false,
+    emergency_on_phone: false,
     notes_en: "",
     notes_cs: "",
     emergency_en: "",
@@ -574,8 +577,20 @@ function renderForm(clinic) {
           <label for="chk_247">Open 24/7</label>
         </div>
         <div class="checkbox-field">
+          <input type="checkbox" id="chk_open_weekends" data-field="open_weekends_bookable" data-type="checkbox" ${clinic.open_weekends_bookable ? "checked" : ""} />
+          <label for="chk_open_weekends">Open on weekends (bookable, like a normal weekday visit)</label>
+        </div>
+        <div class="checkbox-field">
           <input type="checkbox" id="chk_weekend_em" data-field="has_weekend_emergency" data-type="checkbox" ${clinic.has_weekend_emergency ? "checked" : ""} />
-          <label for="chk_weekend_em">Has weekend emergency care</label>
+          <label for="chk_weekend_em">Weekend emergency (open, but not bookable - emergency cases only)</label>
+        </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="chk_after_hours" data-field="after_hours_emergency" data-type="checkbox" ${clinic.after_hours_emergency ? "checked" : ""} />
+          <label for="chk_after_hours">After hours emergency (accepts emergencies outside opening hours)</label>
+        </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="chk_phone_em" data-field="emergency_on_phone" data-type="checkbox" ${clinic.emergency_on_phone ? "checked" : ""} />
+          <label for="chk_phone_em">Emergency on the phone (vet reachable by phone, clinic closed, no vet on site)</label>
         </div>
         <div class="checkbox-field">
           <input type="checkbox" id="chk_hosp" data-field="hospitalization" data-type="checkbox" ${clinic.hospitalization ? "checked" : ""} />
