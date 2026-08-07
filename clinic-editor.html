@@ -114,6 +114,15 @@
     flex-shrink: 0;
   }
 
+  .unpublished-mark {
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .clinic-item.unpublished {
+    opacity: 0.55;
+  }
+
   .review-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: var(--warn-border);
@@ -390,6 +399,8 @@ function createBlankClinic() {
     facebook_url: "",
     instagram_url: "",
     internal_contact_email: "",
+    internal_notes: "",
+    published: false,
     call_phone: "",
     google_rating: null,
     google_review_count: null,
@@ -423,15 +434,17 @@ function renderClinicList() {
     if (query && !clinic.name.toLowerCase().includes(query)) continue;
     if (selectedKraj !== "all" && clinic.kraj !== selectedKraj) continue;
     const div = document.createElement("div");
-    div.className = "clinic-item" + (clinic.id === selectedId ? " selected" : "");
+    div.className = "clinic-item" + (clinic.id === selectedId ? " selected" : "") + (clinic.published === false ? " unpublished" : "");
     const krajText = clinic.kraj ? `<span class="clinic-item-kraj">${escapeHtml(clinic.kraj)}</span>` : "";
     const reviewDot = clinic.hours_needs_review ? '<span class="review-dot" title="Hours need review"></span>' : "";
     const checkedMark = !clinic.manually_checked ? '<span class="unchecked-mark" title="Not yet checked">❗</span>' : "";
+    const unpublishedMark = clinic.published === false ? '<span class="unpublished-mark" title="Hidden from the public site">🚫</span>' : "";
     div.innerHTML = `
       <div class="clinic-item-main">
         <span>${escapeHtml(clinic.name)}</span>
         ${reviewDot}
         ${checkedMark}
+        ${unpublishedMark}
       </div>
       ${krajText}
     `;
@@ -470,9 +483,13 @@ function renderPhoneQuickPicks(phone) {
 function renderForm(clinic) {
   const html = `
     <div class="checked-banner">
-      <label class="checkbox-field" style="margin:0;">
+      <label class="checkbox-field" style="margin:0 0 8px;">
         <input type="checkbox" data-field="manually_checked" data-type="checkbox" data-resync-list="true" ${clinic.manually_checked ? "checked" : ""} />
         <strong>Checked</strong> - I've personally reviewed this clinic's data
+      </label>
+      <label class="checkbox-field" style="margin:0;">
+        <input type="checkbox" data-field="published" data-type="checkbox" data-resync-list="true" ${clinic.published ? "checked" : ""} />
+        <strong>Published</strong> - if unticked, this clinic is hidden from the map and website entirely
       </label>
     </div>
     <div class="section">
@@ -631,6 +648,10 @@ function renderForm(clinic) {
         <div class="field">
           <label>Contact email (for newsletters, outreach, etc.)</label>
           <input type="text" data-field="internal_contact_email" value="${attr(clinic.internal_contact_email)}" />
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <label>Notes (for your own reference only)</label>
+          <textarea data-field="internal_notes">${escapeHtml(clinic.internal_notes)}</textarea>
         </div>
       </div>
     </div>
