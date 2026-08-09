@@ -401,6 +401,7 @@ function createBlankClinic() {
     internal_contact_email: "",
     internal_notes: "",
     published: false,
+    has_rabbit_specialist: false,
     call_phone: "",
     google_rating: null,
     google_review_count: null,
@@ -616,6 +617,10 @@ function renderForm(clinic) {
         <div class="checkbox-field">
           <input type="checkbox" id="chk_english" data-field="english_communication" data-type="checkbox" ${clinic.english_communication ? "checked" : ""} />
           <label for="chk_english">Staff communicate in English</label>
+        </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="chk_rabbit_specialist" data-field="has_rabbit_specialist" data-type="checkbox" ${clinic.has_rabbit_specialist ? "checked" : ""} />
+          <label for="chk_rabbit_specialist">Has rabbit/small mammal specialist (controls whether the map pin shows the rabbit icon)</label>
         </div>
       </div>
     </div>
