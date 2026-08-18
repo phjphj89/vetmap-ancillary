@@ -405,6 +405,7 @@ function createBlankClinic() {
     call_phone: "",
     google_rating: null,
     google_review_count: null,
+    show_reviews: true,
     hospitalization: false,
     english_communication: false,
     weekly_hours,
@@ -575,6 +576,12 @@ function renderForm(clinic) {
         <div class="field">
           <label>Google review count</label>
           <input type="number" step="1" min="0" data-field="google_review_count" data-type="number" value="${clinic.google_review_count ?? ""}" />
+        </div>
+        <div class="field" style="align-self:end;">
+          <div class="checkbox-field">
+            <input type="checkbox" id="chk_show_reviews" data-field="show_reviews" data-type="checkbox" ${clinic.show_reviews !== false ? "checked" : ""} />
+            <label for="chk_show_reviews">Show rating/reviews on the website (data above is still saved either way)</label>
+          </div>
         </div>
         <div class="field">
           <label>Facebook URL</label>
