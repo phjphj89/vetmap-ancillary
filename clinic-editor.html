@@ -408,6 +408,7 @@ function createBlankClinic() {
     show_reviews: true,
     hospitalization: false,
     english_communication: false,
+    petsestra: false,
     weekly_hours,
     hours_needs_review: false,
     manually_checked: false,
@@ -624,6 +625,10 @@ function renderForm(clinic) {
         <div class="checkbox-field">
           <input type="checkbox" id="chk_english" data-field="english_communication" data-type="checkbox" ${clinic.english_communication ? "checked" : ""} />
           <label for="chk_english">Staff communicate in English</label>
+        </div>
+        <div class="checkbox-field">
+          <input type="checkbox" id="chk_petsestra" data-field="petsestra" data-type="checkbox" ${clinic.petsestra ? "checked" : ""} />
+          <label for="chk_petsestra">Petsestra works at this clinic</label>
         </div>
         <div class="checkbox-field">
           <input type="checkbox" id="chk_rabbit_specialist" data-field="has_rabbit_specialist" data-type="checkbox" ${clinic.has_rabbit_specialist ? "checked" : ""} />
